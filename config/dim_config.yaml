@@ -1,0 +1,260 @@
+main:
+  pilot: "dim"
+  log_level: "DEBUG"
+  debug_post_load: False
+  save_dim_feeds: False
+  override_pilot: False
+  
+server:
+  port: 2000
+  host: "localhost"
+  client_timeout: 1000
+  quality_level: "Low"
+  carla_dir: ${env:PYCARLA}/../
+  server_log_dir: ./
+
+hydra:
+  job_logging:
+    root:
+       level: INFO
+    handlers:
+      console:
+        level: INFO
+      file:
+        level: DEBUG
+  run:
+    #  dir: /home/nrhinehart/data/dim_release_results/${now:%Y-%m}/${now:%m-%d-%H-%M-%S}
+    dir: dim_release_results/${now:%Y-%m}/${now:%m-%d-%H-%M-%S}    
+
+experiment:
+  seed: 48
+  scene: "Town02"
+  n_vehicles: 20
+  n_pedestrians: 0
+  n_episodes: 25
+  skip_to: 0
+  n_episodes_run: 0
+  specific_episodes: []
+  frames_per_episode: 5000
+  rstr: ''
+  record_google_sheets: True
+  min_takeover_frames: 50
+  goal_distance_threshold: 20
+  allow_vehicles_to_hit_us_from_behind: False
+
+dim:
+  goal_likelihood: "RegionIndicator"  
+  min_planning_steps: 9
+  max_planning_steps: 10
+  planning_lr: 3e-3
+  replan_period: 8
+  angle_setpoint_index: 7
+  position_setpoint_index: 7
+  check_gradients: True
+  region_clip_K: 20
+  max_top_k: 4
+  initialize_rounds: 1
+  initialize_some_stationary_z: False
+  batched_gaussian_mixture:
+    goal_likelihood_scale: 0.2
+    weight_scheme: "uniform"
+    waypoint_count: 15
+    
+  model_path: "${env:DIMROOT}/models/model_0/"
+  checkpoint_path: None
+  old_version: False
+
+waypointer:
+  interpolate: False
+  n_waypoints: 20
+  stationary_window_size: 600
+  stuck_window_size: 275
+  stuck_ignore_reds: 0
+  stuck_waypoint_distance: 6.
+  turn_waypoint_distance: 5.
+  #  interp_meters_per_waypoint: 4
+  interp_points_per_pair: 3
+  control_meters_per_waypoint: 1
+  min_waypoint_distance: 0
+  max_waypoint_distance: 10000  
+  ensure_one_stationary: 1
+  drop_near_on_turn: False
+  drop_near_on_green: False
+  drop_near_on_yellow: False
+  drop_far_on_red: False
+  lane_fudge_factor: -0.15
+  have_planned: False
+  region_control: False
+  extra_route_node: False
+  divergence_distance: 20
+  reset_route_upon_divergence: True
+  max_red_distance: 5
+  min_green_distance: 2
+  region_d: 1.
+  
+data:
+  use_lidar: True
+  add_steering_noise: 1
+  add_throttle_noise: 1
+  record_wait_frames: 50
+  save_period_frames: 10
+  TT: 60
+  save_data: False
+  # TODO some are deprecated
+  save_lidar: 0
+  save_depth: 0
+  save_frontal_rgb: 0
+  save_semantic: 0
+  Hz: 10
+  measurement_buffer_length: 21
+  # For data saving.
+  shapes:
+    B: 1
+    A: 1
+    T_past: 3
+    T: 20
+    H: 100
+    W: 100
+    C: 4
+    D: 2
+  # TODO some are deprecated
+  n_past_frames: 20
+  n_future_frames: 40
+  image_size: [800, 450]
+
+trackers:
+  stationary_window_size: 600
+  stationary_threshold: 4
+  stuck_window_size: 275
+  stuck_ignore_reds: 0
+  reset_trackers_on_red: True
+  turn_tracker_frames: 25
+  turn_tracker_thresh: 25
+  x_thresh_block: 8.5
+  y_thresh_block: 2.25
+  
+plotting:
+  hires_plot: 0
+  save_plots: 1
+  plot: 1
+  # Will remove the row when saving the plots.
+  remove_second_row: 1
+  dpi: 96
+  imgfmt: 'jpg'
+  plot_zoomed: True
+  plot_text_block: True
+  plot_legend: False
+  plot_chosen_waypoint: False
+  plot_overhead_im: True
+  hires_dim_font_size: 6
+  lores_dim_font_size: 3
+
+  expert_color: ''
+  generator_color: ''
+  past_color: ''
+
+  generator:
+    color: ''
+    alpha: 0.2
+    markeredgecolor: 'none'
+    markersize: 10
+
+  plan:
+    color: 'skyblue'
+    markeredgecolor: 'k'
+    markeredgewidth: 1
+    markersize: 10
+    zorder: 20
+    alpha: 0.8
+
+  past:
+    marker: 'x'
+    alpha: 0.0
+    linewidth: 0
+    alpha: 0.5
+
+  waypoint:
+    marker: 'x'
+    color: 'green'
+    zorder: 50
+    alpha: 0.8
+    linewidth: 1
+    markersize: 5
+
+  polygon:
+    color: '#ff7f00'
+    alpha: 0.4
+
+  polygon_seed:
+    markersize: 3
+    linewidth: 1
+    marker: 'D'
+    alpha: 0.5
+
+  control_waypoints:
+    color: 'blue'
+    alpha: 0.2
+    marker: 's'
+    linewidth: 0
+    markersize: 7
+
+  mixture_waypoints:
+    alpha: 0.4
+    color: '#ff7f00'
+    marker: 'D'
+    linewidth: 0
+    markersize: 7
+
+  segment_set:
+    alpha: 0.4
+    marker: 'D'
+    linewidth: 2
+    markersize: 7
+
+  region_vertices:
+    marker: 's'
+    color: 'blue'
+    linewidth: 1
+    markersize: 7
+    alpha: 0.2
+
+  route:
+    color: 'black'
+    alpha: 0.2
+
+  destination:
+    color: 'gold'
+    alpha: 1.0
+    marker: '*'
+
+  chosen:
+    alpha: 0.8
+    marker: '+'
+    linewidth: 0
+    zorder: 500
+
+  colors: []
+  cw_colors: []
+  past_alpha: 0.0
+  zoom_bounds: [0, 100, 100, 0]
+  zoom_out_bounds: [-100, 200, 200, -100]
+  legend_font_size: 5
+  
+pid:
+  kp_throttle: 0.2
+  kp_steer: 0.8
+  kp_brake: 1.0
+  # Haven't used nonzeros for the rest of these for awhile...
+  ki_throttle: 0.0
+  ki_brake: 0.0
+  ki_steer: 0.0
+  kd_throttle: 0.0
+  kd_brake: 0.0
+  kd_steer: 0.0
+  # TODO Could probably remove some of the below params now.
+  throttle_bias: 0.0
+  steer_bias: 0.0
+  brake_bias: 0.0
+  form_brake: 'full'
+  form_steer: 'full'
+  form_throttle: 'full'    

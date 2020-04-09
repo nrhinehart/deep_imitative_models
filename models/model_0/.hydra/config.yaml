@@ -1,0 +1,119 @@
+bijection:
+  class: precog.bijection.social_convrnn.SocialConvRNN
+  params:
+    A: 1
+    cnnconf:
+      F: 16
+      activation: relu
+      append_cnn_input_to_cnn_output: false
+      conv_filters: 32
+      create_overhead_feature: false
+      create_residual_connections: true
+      do_batchnorm: false
+      kernel_size: 3
+      n_conv_layers: 4
+    debug_eager: false
+    debug_static: false
+    lightconf:
+      lightrep: 5
+      postrnn_light_feats: true
+      use_light_feats: true
+    mlpconf:
+      activation: tanh
+      do_prernn_mlp: true
+      mlp_units: 200
+      n_postrnn_layers: 2
+      n_prernn_layers: 2
+    rnnconf:
+      future_gru_units: 200
+      past_do_preconv: true
+      past_gru_units: 128
+      past_perturb: false
+      preconv_horizon: 3
+      use_future_rnn: true
+    socialconf:
+      social_mlp_units: 200
+      use_social_feats: false
+      use_social_map_feats: true
+    whiskerconf:
+      arclength: 3.92699081699
+      n_samples: 14
+      radii:
+      - 2
+      - 4
+      - 8
+      use_whiskers: true
+dataset:
+  class: precog.dataset.serialized_dataset.SerializedDataset
+  params:
+    B: 10
+    T: 20
+    T_past: 3
+    W: 100
+    _max_A: 1
+    _name: carla_town01_A1_T20_v2
+    extra_params:
+      allow_horizon_mismatch: false
+      get_sdt_params:
+        sdt_clip_thresh: 0.5
+        sdt_params:
+          clip_bottom: -3
+          clip_top: 1
+          normalize: true
+        sdt_params_name: _clip0.5_stamp_neg3
+        sdt_zero_h: 3
+        sdt_zero_w: 8
+        stamp: true
+    feature_pixels_per_meter: 2.0
+    fmt: json
+    keyremap:
+      overhead_features: overhead_features
+      player_future: S_future_world_frame
+      player_past: S_past_world_frame
+      player_yaw: yaws
+    load_bev: true
+    match_prefix: feed_*
+    root_path: /global/scratch/nrhinehart/data/dim_release_results/2020-03
+    sdt_bev: false
+    test_suffix: /test/
+    train_suffix: /train/
+    val_suffix: /val/
+  plot_allchannel: false
+distribution:
+  params:
+    K: 12
+    logdet_method: manual
+    name: foo
+    sample_K: 12
+hardware:
+  allow_growth: true
+  per_process_gpu_memory_fraction: 0.2
+main:
+  eager: false
+  seed: 42
+  tag: slurm_5800453-2_whiskerfix_lightfix_F16
+objective:
+  class: precog.objective.forward_kl.ForwardKL
+  params:
+    K_perturb: 12
+optimizer:
+  class: optimizer.sgd_optimizer.SGDOptimizer
+  opt_method_choose_best: forward_KL
+  params:
+    debug: false
+    epochs: 10000000
+    evaluate_period: 5000
+    figsize:
+    - 8
+    - 20
+    learning_rate: 0.0004
+    plot_before_train: true
+    plot_period: 500
+    plot_without_samples: false
+    record_to_sheets: true
+    save_before_train: true
+    save_eager_figures: false
+proxy:
+  class: precog.distribution.empty_proxy.EmptyProxy
+sample_metric:
+  class: precog.sample_metric.minmsd.MHat

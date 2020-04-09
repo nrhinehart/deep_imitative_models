@@ -1,0 +1,69 @@
+hydra:
+  hydra_logging:
+    disable_existing_loggers: false
+    formatters:
+      simple:
+        format: '[%(asctime)s] - %(message)s'
+    handlers:
+      console:
+        class: logging.StreamHandler
+        formatter: simple
+        stream: ext://sys.stdout
+    loggers:
+      logging_example:
+        level: DEBUG
+    root:
+      handlers:
+      - console
+      level: INFO
+    version: 1
+  job:
+    name: esp_train
+    override_dirname: bijection.params.A=1,bijection.params.cnnconf.F=16,dataset.params.root_path=/global/scratch/nrhinehart/data/dim_release_results/2020-03,dataset=carla_town01_A1_T20_v2,hardware=savio_cluster,main.eager=False,main.tag=slurm_5800453-2_whiskerfix_lightfix_F16
+  job_logging:
+    disable_existing_loggers: false
+    formatters:
+      simple:
+        format: '[%(asctime)s][%(name)s][%(levelname)s] - %(message)s'
+    handlers:
+      console:
+        class: logging.StreamHandler
+        formatter: simple
+        level: INFO
+        stream: ext://sys.stdout
+      file:
+        class: logging.FileHandler
+        filename: ${hydra.job.name}.log
+        formatter: simple
+        level: DEBUG
+    root:
+      handlers:
+      - console
+      - file
+      level: INFO
+    version: 1
+  launcher:
+    class: hydra._internal.core_plugins.basic_launcher.BasicLauncher
+  output_subdir: .hydra
+  overrides:
+    hydra: []
+    task:
+    - dataset=carla_town01_A1_T20_v2
+    - hardware=savio_cluster
+    - dataset.params.root_path=/global/scratch/nrhinehart/data/dim_release_results/2020-03
+    - main.eager=False
+    - bijection.params.A=1
+    - main.tag=slurm_5800453-2_whiskerfix_lightfix_F16
+    - bijection.params.cnnconf.F=16
+  run:
+    dir: /global/scratch/nrhinehart/data/esp_train_results/${now:%Y-%m}/${now:%m-%d-%H-%M-%S}_${dataset.params._name}_${bijection.class}_${main.tag}
+  shell:
+    install: null
+    query: null
+    uninstall: null
+  sweep:
+    dir: multirun/${now:%Y-%m-%d}/${now:%H-%M-%S}
+    subdir: ${hydra.job.num}_${hydra.job.id}
+  sweeper:
+    class: hydra._internal.core_plugins.basic_sweeper.BasicSweeper
+  verbose: false

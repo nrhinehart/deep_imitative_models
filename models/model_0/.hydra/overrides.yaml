@@ -1,0 +1,7 @@
+- dataset=carla_town01_A1_T20_v2
+- hardware=savio_cluster
+- dataset.params.root_path=/global/scratch/nrhinehart/data/dim_release_results/2020-03
+- main.eager=False
+- bijection.params.A=1
+- main.tag=slurm_5800453-2_whiskerfix_lightfix_F16
+- bijection.params.cnnconf.F=16
