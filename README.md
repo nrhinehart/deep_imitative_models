@@ -1,3 +1,5 @@
+[![License: CC BY-NC-ND 4.0](https://img.shields.io/badge/License-CC%20BY--NC--ND%204.0-lightgrey.svg)](https://creativecommons.org/licenses/by-nc-nd/4.0/)
+
 # Purposes
 
 1. Collect data to train a Deep Imitative Model in CARLA
@@ -17,7 +19,7 @@ Openreview: [https://openreview.net/pdf?id=Skl4mRNYDr](https://openreview.net/pd
 # Setup
 ## You'll need to install CARLA. This was tested with CARLA 0.8.4, release version.
 
-0. Install the `precog` repo
+0. Install the PRECOG repo: [https://github.com/nrhine1/precog](https://github.com/nrhine1/precog)
 1. Set the path to CARLA in `env.sh` as the `PYCARLA` variable.
 2. Create and activate a conda environment (you can use virtualenv instead, if you'd like)
 3. Source the environment for the repo
