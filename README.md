@@ -62,6 +62,7 @@ waypointer.interpolate=False \
 experiment.scene=Town01 \
 experiment.n_vehicles=50
 ```
+N.B. that the matplotlib Figure plots are not updated dynamically -- you should instead look for the results in the directories in the format: ```<current_working_dir>/dim_release_results/<YEAR>-<MONTH>/<DATE>/episode_<ABCDEF>/plots/```
 
 ## Generate high-res plots without debug info:
 Add the following options: `plotting.plot_text_block=False plotting.hires_plot=1`
