@@ -17,15 +17,20 @@ Openreview: [https://openreview.net/pdf?id=Skl4mRNYDr](https://openreview.net/pd
 4. `dim/env/run_carla_episode.py` : Runs a single CARLA episode with autopilot or a DIM.
 
 # Setup
-## You'll need to install CARLA. This was tested with CARLA 0.8.4, release version.
 
-0. Install the PRECOG repo: [https://github.com/nrhine1/precog](https://github.com/nrhine1/precog)
-1. Set the path to CARLA in `env.sh` as the `PYCARLA` variable.
-2. Create and activate a conda environment (you can use virtualenv instead, if you'd like)
-3. Source the environment for the repo
-4. Install the dependencies.
-5. Update the CARLA devkit `transform.py`
-6. Update the checkpoint file of the model
+## Install some dependencies:
+0. You'll need to install CARLA. This was tested with CARLA 0.8.4, release version.
+1. Install the PRECOG repo: [https://github.com/nrhine1/precog](https://github.com/nrhine1/precog)
+2. Set the path to CARLA in `env.sh` as the `PYCARLA` variable.
+
+## Execute the code block below:
+The BASH code block below implemented the following steps:
+
+0. Create and activate a conda environment (you can use virtualenv instead, if you'd like)
+1. Source the environment for the repo
+2. Install the dependencies.
+3. Update the CARLA devkit `transform.py`
+4. Update the checkpoint file of the model
 
 ```bash
 export DIMCONDAENV=dim3
@@ -36,6 +41,19 @@ pip install -r requirements.txt
 cp $DIMROOT/ext/transform.py $PYCARLA/carla/
 python $DIMROOT/scripts/create_checkpoint_file.py $DIMROOT/models/model_0/
 ```
+
+# Applying the pretrained Deep Imitative Model. 
+This command starts the server, runs it offscreen, and applies the default model (in `dim_config.yaml`) with the RegionIndicator goal likelihood to `Town01`.
+```bash
+export CUDA_VISIBLE_DEVICES=0; SDL_VIDEODRIVER=offscreen SDL_HINT_CUDA_DEVICE=0 python -m pdb -c c $DIMROOT/carla_agent.py \
+main.log_level=DEBUG \
+main.pilot=dim \
+dim.goal_likelihood=RegionIndicator \
+waypointer.interpolate=False \
+experiment.scene=Town01 \
+experiment.n_vehicles=50
+```
+N.B. that the matplotlib Figure plots are not updated dynamically -- you should instead look for the results in the directories in the format: ```<current_working_dir>/dim_release_results/<YEAR>-<MONTH>/<DATE>/episode_<ABCDEF>/plots/```
 
 # Data collection with the autopilot:
 
@@ -50,19 +68,6 @@ experiment.n_episodes=1000
 ```
 
 This command will collect 1000 episodes. With the current defaults, each episodes will consist of 100 serialized data points
-
-# Applying the pretrained Deep Imitative Model. 
-This command starts the server, runs it offscreen, and applies the default model (in `dim_config.yaml`) with the RegionIndicator goal likelihood to `Town01`.
-```bash
-export CUDA_VISIBLE_DEVICES=0; SDL_VIDEODRIVER=offscreen SDL_HINT_CUDA_DEVICE=0 python -m pdb -c c $DIMROOT/carla_agent.py \
-main.log_level=DEBUG \
-main.pilot=dim \
-dim.goal_likelihood=RegionIndicator \
-waypointer.interpolate=False \
-experiment.scene=Town01 \
-experiment.n_vehicles=50
-```
-N.B. that the matplotlib Figure plots are not updated dynamically -- you should instead look for the results in the directories in the format: ```<current_working_dir>/dim_release_results/<YEAR>-<MONTH>/<DATE>/episode_<ABCDEF>/plots/```
 
 ## Generate high-res plots without debug info:
 Add the following options: `plotting.plot_text_block=False plotting.hires_plot=1`
