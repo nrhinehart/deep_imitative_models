@@ -3,7 +3,7 @@
 # Purposes
 
 1. Collect data to train a Deep Imitative Model in CARLA
-2. Apply a Deep Imitative Model to CARLA
+2. Apply a Deep Imitative Model to CARLA (a pretrained model is included with this repo)
 
 Openreview: [https://openreview.net/pdf?id=Skl4mRNYDr](https://openreview.net/pdf?id=Skl4mRNYDr)
 
@@ -51,8 +51,8 @@ experiment.n_episodes=1000
 
 This command will collect 1000 episodes. With the current defaults, each episodes will consist of 100 serialized data points
 
-# Applying a Deep Imitative Model. 
-It starts the server and runs it offscreen and applies the default model (in `dim_config.yaml`) with the RegionIndicator goal likelihood to `Town01`.
+# Applying the pretrained Deep Imitative Model. 
+This command starts the server, runs it offscreen, and applies the default model (in `dim_config.yaml`) with the RegionIndicator goal likelihood to `Town01`.
 ```bash
 export CUDA_VISIBLE_DEVICES=0; SDL_VIDEODRIVER=offscreen SDL_HINT_CUDA_DEVICE=0 python -m pdb -c c $DIMROOT/carla_agent.py \
 main.log_level=DEBUG \
